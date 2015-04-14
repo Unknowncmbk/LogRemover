@@ -14,6 +14,7 @@ to bring the total filesystem utilization down to 80%.
 This program was written and tested on MacOS 10.9.5, and further tested on various Scientific
 Linux 6 workstations.
 - Python 2.7.+
+- Unix required for os.statvfs(), so no Windows.
 
 ## Instructions
 Run directly from command line as Python script:
