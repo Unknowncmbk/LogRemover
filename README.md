@@ -3,17 +3,17 @@ Python script that removes .log files until filesystem utilization is under x%.
 
 ## Introduction to LogRemover
 LogRemover is a simple Python script that removes the oldest .log files until the total 
-filesystemutilization is under x%. The default utilization is 0.8 (80%).
+filesystem utilization is under x%. The default utilization is 0.8 (80%).
 
 ## Background
-One of our network filesystems is filling up! 0 Write a shell script (in your favorite scripting 
+One of our network filesystems is filling up! Write a shell script (in your favorite scripting 
 language) that can be run daily to search a directory tree and remove all the oldest ".log" files
 to bring the total filesystem utilization down to 80%.
 
 ## Requirements
 This program was written and tested on MacOS 10.9.5, and further tested on various Scientific
 Linux 6 workstations.
-- Python 2.7.9
+- Python 2.7.+
 
 ## Instructions
 Run directly from command line as Python script:
