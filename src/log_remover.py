@@ -118,33 +118,34 @@ def _find_files(path, pattern):
 
 	return result
 
-# Execute from command line
-if len(sys.argv) > 1:
-	path = sys.argv[1]
-	disk_usage = _get_disk_usage(path)
-
-	# If we want to run the rest of the script
-	if disk_usage[3] > TOTAL_UTILIZATION * 100:
-
-		LOG.debug(str(time.ctime(time.time())) + ": Disk usage of " + str(disk_usage[3]) + "% exceeds limit of " + str(TOTAL_UTILIZATION * 100) + "%.")
-
-		# find all .log files in path
-		files = _find_files(path, '*.log')
-
-		# sort files based on modified date
-		files = sorted(files, key=lambda date: date[2])
-
-		# used is for debugging purposes, used == disk_usage[3]
-		removed, used = _remove_files(files, disk_usage)
-
-		for r in removed:
-			LOG.debug(str(time.ctime(time.time())) + ": Removed " + str(r))
-
-		# log the results of this script
+if __name__ == '__main__':
+	# Execute from command line
+	if len(sys.argv) > 1:
+		path = sys.argv[1]
 		disk_usage = _get_disk_usage(path)
-		if disk_usage[3] < TOTAL_UTILIZATION * 100:
-			LOG.debug(str(time.ctime(time.time())) + ": Usage of " + str(disk_usage[3]) + "% within limit of " + str(TOTAL_UTILIZATION * 100) + "%.")
+
+		# If we want to run the rest of the script
+		if disk_usage[3] > TOTAL_UTILIZATION * 100:
+
+			LOG.debug(str(time.ctime(time.time())) + ": Disk usage of " + str(disk_usage[3]) + "% exceeds limit of " + str(TOTAL_UTILIZATION * 100) + "%.")
+
+			# find all .log files in path
+			files = _find_files(path, '*.log')
+
+			# sort files based on modified date
+			files = sorted(files, key=lambda date: date[2])
+
+			# used is for debugging purposes, used == disk_usage[3]
+			removed, used = _remove_files(files, disk_usage)
+
+			for r in removed:
+				LOG.debug(str(time.ctime(time.time())) + ": Removed " + str(r))
+
+			# log the results of this script
+			disk_usage = _get_disk_usage(path)
+			if disk_usage[3] < TOTAL_UTILIZATION * 100:
+				LOG.debug(str(time.ctime(time.time())) + ": Usage of " + str(disk_usage[3]) + "% within limit of " + str(TOTAL_UTILIZATION * 100) + "%.")
+			else:
+				LOG.debug(str(time.ctime(time.time())) + ": Removed all .log files within " + str(path) + ", however, usage is still at " + str(disk_usage[3]) + "%.")
 		else:
-			LOG.debug(str(time.ctime(time.time())) + ": Removed all .log files within " + str(path) + ", however, usage is still at " + str(disk_usage[3]) + "%.")
-	else:
-		LOG.debug(str(time.ctime(time.time())) + ": Usage of " + str(disk_usage[3]) + "% within limit of " + str(TOTAL_UTILIZATION * 100) + "%.")
+			LOG.debug(str(time.ctime(time.time())) + ": Usage of " + str(disk_usage[3]) + "% within limit of " + str(TOTAL_UTILIZATION * 100) + "%.")
