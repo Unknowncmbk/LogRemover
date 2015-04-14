@@ -1,0 +1,46 @@
+Project Title: Log Remover
+Author: Stephen Bahr (sbahr@bu.edu)
+Files: log_remover.py
+
+Project overview:
+Write a shell script (in your favorite scripting language for Windows or Linux) 
+that can be run daily to search a directory tree and remove all the oldest .log
+files to bring the total filesystem utilization down to 80%.
+
+References:
+- Finding file by pattern: http://stackoverflow.com/questions/1724693/find-a-file-in-python
+- Sorting: https://docs.python.org/2/howto/sorting.html#sortinghowto
+- Calculating disk usage: https://docs.python.org/2/library/statvfs.html
+- Logging: https://docs.python.org/2.6/library/logging.html
+
+Issues ran into:
+- When computing _get_disk_usage(), used space is calculated as total blocks - free blocks * block size. 
+	The issue with this is a file is shown in the filesystem as bytes. A 512 byte file is 1/2 a block.
+	Therefore in _remove_files(), we should be calculating the number of blocks that we are removing 
+	from used, and not just the size of the file.
+
+Design Decisions/Notes:
+- The math that calculates diskusage (_get_disk_usage()) is very expensive, so we do not want
+to keep calling that function in our remove file loop. Instead, we keep track of used space,
+and decrement it when we remove blocks upon log deletion, allowing for simple and efficient
+removals.
+- Decided that the arguments should only be the path directory, as specificying the utilization
+in the arguments could lead to unexpectedly losing all log files.
+- Even though this remove .log files from a directory, we still should create and verbose the
+.log files we remove. This is why we logged the script.
+
+Program Errors:
+- The error is in the project overview. If this script is called when the disk_usage is at 99%,
+and we try to remove all log files, this script can bring the disk_usage down to something still above
+the threshold. All log files can be deleted as a result, which is extremely bad.
+- If a program uses one massive log file, deleting it could be extremely bad.
+
+Improvements:
+- Allow for user input on system utilization.
+- Allow for user input on pattern matching (not just .log files)
+
+Time spent:
+Total: 2.5-3.5 hours
+Planning: ~15 mins
+Testing: ~1 hour
+Documentation: ~30mins-1 hour

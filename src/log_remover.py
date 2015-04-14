@@ -1,26 +1,15 @@
-''' 
-Project overview:
-	Write a shell script (in your favorite scripting language for Windows or Linux) 
-	that can be run daily to search a directory tree and remove all the oldest .log
-	files to bring the total filesystem utilization down to 80%.
-
-	Questions to ask Raffi:
-	- Do you want the oldest log files based on creation or modified date?
-
-	References:
-	- Finding file by pattern: http://stackoverflow.com/questions/1724693/find-a-file-in-python
-	- Sorting: https://docs.python.org/2/howto/sorting.html#sortinghowto
-	- Calculating disk usage: https://docs.python.org/2/library/statvfs.html
-	- Logging: https://docs.python.org/2.6/library/logging.html
-
-	Issues ran into:
-	- When computing _get_disk_usage(), used space is calculated as total blocks - free blocks * block size. 
-		The issue with this is a file is shown in the filesystem as bytes. A 512 byte file is 1/2 a block.
-		Therefore in _remove_files(), we should be calculating the number of blocks that we are removing 
-		from used, and not just the size of the file.
-
-	Total hours: 2.5 - 3 hours, ~15 mins for planning, ~1 hour testing.
-
+'''
+//============================================================================
+// Name        : log_remover.py
+// Author      : Stephen Bahr (sbahr@bu.edu)
+// Version     : 1.0
+// Description : A script that removes .log files until filesystem utilization falls under 80%.
+// Sources: 
+//    - Finding file by pattern: http://stackoverflow.com/questions/1724693/find-a-file-in-python
+//    - Sorting: https://docs.python.org/2/howto/sorting.html#sortinghowto
+//    - Calculating disk usage: https://docs.python.org/2/library/statvfs.html
+//    - Logging: https://docs.python.org/2.6/library/logging.html
+//============================================================================
 '''
 
 #!/usr/bin/env python
@@ -157,3 +146,5 @@ if len(sys.argv) > 1:
 			LOG.debug(str(time.ctime(time.time())) + ": Usage of " + str(disk_usage[3]) + "% within limit of " + str(TOTAL_UTILIZATION * 100) + "%.")
 		else:
 			LOG.debug(str(time.ctime(time.time())) + ": Removed all .log files within " + str(path) + ", however, usage is still at " + str(disk_usage[3]) + "%.")
+	else:
+		LOG.debug(str(time.ctime(time.time())) + ": Usage of " + str(disk_usage[3]) + "% within limit of " + str(TOTAL_UTILIZATION * 100) + "%.")
