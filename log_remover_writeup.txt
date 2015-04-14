@@ -20,6 +20,7 @@ Issues ran into:
 	from used, and not just the size of the file.
 
 Design Decisions/Notes:
+- Instead of creating one script for Windows and one for Linux, we can use Python to create a script that can run on both machines.
 - The math that calculates diskusage (_get_disk_usage()) is very expensive, so we do not want
 to keep calling that function in our remove file loop. Instead, we keep track of used space,
 and decrement it when we remove blocks upon log deletion, allowing for simple and efficient
